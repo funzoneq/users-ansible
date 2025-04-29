@@ -18,7 +18,7 @@
     - matt
 
 - name: Create .ssh folder
-  file:
+  ansible.builtin.file:
     path: "/home/{{ item }}/.ssh"
     state: directory
     owner: "{{ item }}"
@@ -30,12 +30,24 @@
     - matt
 
 - name: Upload SSH key
-  copy:
+  ansible.builtin.copy:
     src: "files/{{ item }}.pub"
     dest: "/home/{{ item }}/.ssh/authorized_keys"
     owner: "{{ item }}"
     group: "{{ item }}"
     mode: 0600
+  loop:
+    - avermeer
+    - pozar
+    - matt
+
+- name: Add sudoers file
+  ansible.builtin.template:
+    src: "templates/sudoers.j2"
+    dest: "/etc/sudoers.d/{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: 0440
   loop:
     - avermeer
     - pozar
