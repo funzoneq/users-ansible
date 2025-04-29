@@ -1,0 +1,42 @@
+- name: "Add the group {{ item }}"
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - avermeer
+    - pozar
+    - matt
+
+- name: "Add the user {{ item }}"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    shell: /bin/bash
+    groups: "{{ item }},sudo"
+  loop:
+    - avermeer
+    - pozar
+    - matt
+
+- name: Create .ssh folder
+  file:
+    path: "/home/{{ item }}/.ssh"
+    state: directory
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0700
+  loop:
+    - avermeer
+    - pozar
+    - matt
+
+- name: Upload SSH key
+  copy:
+    src: "files/{{ item }}.pub"
+    dest: "/home/{{ item }}/.ssh/authorized_keys"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0600
+  loop:
+    - avermeer
+    - pozar
+    - matt

@@ -1,0 +1,4 @@
+- name: Setup user permissions
+  hosts: all
+  roles:
+    - users
